@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { useSetRecoilState } from "recoil";
-import { userState } from "@/store/user";
+// import { useSetRecoilState } from "recoil";
+// import { userState } from "@/store/user";
 // import { auth } from "@/firebase";
 // import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const GoogleLoginBtn = () => {
-	const setUser = useSetRecoilState(userState);
+	// const setUser = useSetRecoilState(userState);
 
 	// const provider = new GoogleAuthProvider();
 

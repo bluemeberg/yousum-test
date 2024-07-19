@@ -26,7 +26,7 @@ const LogoHeader = ({ title }: LogoHeaderProps) => {
 
 	const logOut = async () => {
 		try {
-			await signOut(auth);
+			// await signOut(auth);
 			setUser({
 				name: "",
 				email: "",
