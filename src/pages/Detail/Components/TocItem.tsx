@@ -1,16 +1,15 @@
 import styled from "styled-components";
 import PlayIcon from "@/assets/play.svg?react";
-import Footer from "@/pages/Landing/Components/Footer";
 
 interface TocItemProps {
-	seq: number;
 	start: number;
 	end: number;
 	summary: string;
+	headline: string;
 	onClick: () => void;
 }
 
-const TocItem = ({ seq, start, end, summary, headline, onClick }: TocItemProps) => {
+const TocItem = ({ start, end, summary, headline, onClick }: TocItemProps) => {
 	const formatMinutesToTime = (minutes: number): string => {
 		const hours = Math.floor(minutes / 60);
 		const remainingMinutes = minutes % 60;

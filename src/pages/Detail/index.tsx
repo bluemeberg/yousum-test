@@ -97,7 +97,6 @@ const index = () => {
 					return (
 						<TocItem
 							key={index}
-							seq={index + 1}
 							start={Math.floor(Number(start_time))}
 							end={Math.floor(Number(end_time))}
 							summary={contents}
