@@ -123,7 +123,7 @@ const Summary = styled.div`
 		height: 80px;
 		font-size: 16px;
 		font-weight: 400;
-		line-height: 160%;
+		line-height: 168%;
 
 		display: -webkit-box;
 		word-break: break-word;

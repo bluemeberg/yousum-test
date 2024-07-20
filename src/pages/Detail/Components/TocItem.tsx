@@ -82,8 +82,8 @@ const Timeline = styled.div`
 
 const Summary = styled.div`
 	font-size: 18px;
-	font-weight: 500;
-	line-height: 160%;
+	font-weight: 400;
+	line-height: 168%;
 	/* letter-spacing: ; */
 	text-align: left;
 `;
