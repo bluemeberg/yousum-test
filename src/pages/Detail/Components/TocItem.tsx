@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import PlayIcon from "@/assets/play.svg?react";
+import Footer from "@/pages/Landing/Components/Footer";
 
 interface TocItemProps {
 	seq: number;
@@ -9,7 +10,7 @@ interface TocItemProps {
 	onClick: () => void;
 }
 
-const TocItem = ({ seq, start, end, summary, onClick }: TocItemProps) => {
+const TocItem = ({ seq, start, end, summary, headline, onClick }: TocItemProps) => {
 	const formatMinutesToTime = (minutes: number): string => {
 		const hours = Math.floor(minutes / 60);
 		const remainingMinutes = minutes % 60;
@@ -26,7 +27,7 @@ const TocItem = ({ seq, start, end, summary, onClick }: TocItemProps) => {
 
 	return (
 		<Container>
-			<Title>목차 {seq}</Title>
+			<Title>{headline}</Title>
 			<Thumbnail>
 				<PlayIcon onClick={onClick} />
 			</Thumbnail>
@@ -45,13 +46,14 @@ const Container = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: calc(100% - 40px);
-	margin-top: 24px;
+	margin-top: 40px;
+	margin-bottom: 32px;
 `;
 
 const Title = styled.span`
-	font-size: 20px;
+	font-size: 24px;
 	font-weight: 600;
-	line-height: 23.87px;
+	line-height: 120%;
 `;
 
 const Thumbnail = styled.div`
@@ -80,9 +82,9 @@ const Timeline = styled.div`
 `;
 
 const Summary = styled.div`
-	font-size: 16px;
+	font-size: 18px;
 	font-weight: 500;
-	line-height: 24px;
-	letter-spacing: -0.02em;
+	line-height: 160%;
+	/* letter-spacing: ; */
 	text-align: left;
 `;

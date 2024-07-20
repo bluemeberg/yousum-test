@@ -6,6 +6,7 @@ import TocItem from "./Components/TocItem";
 import { useRecoilValue } from "recoil";
 import { detailDataState } from "@/store/detailData";
 import { DataProps } from "@/types/dataProps";
+import Footer from "../Landing/Components/Footer";
 
 const index = () => {
 	const detailData = useRecoilValue<DataProps>(detailDataState);
@@ -37,7 +38,7 @@ const index = () => {
 		height: "202",
 		width: "360",
 		playerVars: {
-			autoplay: 0,
+			autoplay: 1,
 			rel: 0,
 			start: 5,
 			end: 10,
@@ -92,7 +93,7 @@ const index = () => {
 				</div>
 			</TOC>
 			<Contents>
-				{detailData.template_summary.map(({ start_time, end_time, contents }, index) => {
+				{detailData.template_summary.map(({ start_time, end_time, contents, headline }, index) => {
 					return (
 						<TocItem
 							key={index}
@@ -100,11 +101,13 @@ const index = () => {
 							start={Math.floor(Number(start_time))}
 							end={Math.floor(Number(end_time))}
 							summary={contents}
+							headline={headline}
 							onClick={() => handleTocItemClick(Math.floor(Number(start_time)))}
 						/>
 					);
 				})}
 			</Contents>
+			<Footer />
 		</Container>
 	);
 };
@@ -162,10 +165,10 @@ const TOC = styled.div<{ $isFixed: boolean }>`
 	}
 
 	div:nth-child(2) {
-		padding: 12px 16px 12px 16px;
+		padding: 20px;
 		display: flex;
 		flex-direction: column;
-		gap: 12px;
+		gap: 16px;
 		background-color: rgba(242, 242, 242, 1);
 		font-size: 16px;
 		font-weight: 600;
