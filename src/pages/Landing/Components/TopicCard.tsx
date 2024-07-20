@@ -110,7 +110,7 @@ const IconBox = styled.div`
 
 const Title = styled.span`
 	font-size: 20px;
-	font-weight: 800;
+	font-weight: 900;
 	line-height: 28px;
 `;
 
@@ -121,7 +121,7 @@ const Summary = styled.div`
 
 	p {
 		height: 80px;
-		font-size: 14px;
+		font-size: 16px;
 		font-weight: 400;
 		line-height: 160%;
 
