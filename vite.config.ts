@@ -19,5 +19,8 @@ export default () => {
 				// proxy 관련 설정
 			},
 		},
+		build: {
+			outDir: "build", // 빌드 출력 디렉토리를 build로 설정
+		},
 	});
 };
