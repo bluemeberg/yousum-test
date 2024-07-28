@@ -1,12 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
 import TopicCard from "./TopicCard";
 import { DataProps } from "@/types/dataProps";
 import TodayIcon from "@/assets/today.svg?react";
 import InfoIcon from "@/assets/info.svg?react";
 import { YOUTUBE_TOPICS } from "@/constants/topic";
+import { calcuateTimeLeft } from "@/utils/formatter";
 
 const TODAY_TITLE = "유투브 투데이";
+const TOOLTIP_OPTION1 =
+	"조회수 대비 참여도(좋아요, 댓글 수 등)가 높은 순으로 오늘 업로드된 최대 3개의 영상이 각 주제 별로 노출됩니다.";
+const TOOLTIP_OPTION2 = "조회수가 높은 순으로 오늘 업로드된 최대 3개의 영상이 각 주제 별로 노출됩니다.";
 
 interface YoutubeTodayProps {
 	data: DataProps[];
@@ -15,23 +19,41 @@ interface YoutubeTodayProps {
 const YoutubeToday = ({ data }: YoutubeTodayProps) => {
 	const [timeLeft, setTimeLeft] = useState<string>("");
 	const [selectedTopic, setSelectedTopic] = useState<string>("전체");
-
-	const formatToTwoDigits = (time: number): string => time.toString().padStart(2, "0");
-
-	const calcuateTimeLeft = (): string => {
-		const now = new Date();
-		const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 9, 0, 0);
-		const diff = tomorrow.getTime() - now.getTime();
-		const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-		const minutes = Math.floor((diff / (1000 * 60)) % 60);
-		const seconds = Math.floor((diff / 1000) % 60);
-
-		return `${formatToTwoDigits(hours)}:${formatToTwoDigits(minutes)}:${formatToTwoDigits(seconds)}`;
-	};
+	const [sortCriteria, setSortCriteria] = useState("engagement");
+	const [tooltipVisible, setTooltipVisible] = useState(false);
+	const [isFixed, setIsFixed] = useState(false);
+	const scrollRef = useRef<HTMLDivElement>(null);
+	const infoIconRef = useRef<HTMLDivElement>(null);
 
 	const handleTopicClick = (topic: string) => {
 		setSelectedTopic(topic);
 	};
+
+	const handleSortClick = (criteria: string) => {
+		setSortCriteria(criteria);
+	};
+
+	const handleClickIcon = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		setTooltipVisible(!tooltipVisible);
+	};
+	const handleClickOutside = (e: MouseEvent) => {
+		if (infoIconRef.current && !infoIconRef.current.contains(e.target as Node)) {
+			setTooltipVisible(false);
+		}
+	};
+
+	const filteredAndSortedData = useMemo(() => {
+		const filteredData = data.filter((item) => selectedTopic === "전체" || item.section === selectedTopic);
+		const sortedData = filteredData.sort((a, b) => {
+			if (sortCriteria === "engagement") {
+				return b.engagement_score - a.engagement_score;
+			} else {
+				return b.views - a.views;
+			}
+		});
+		return sortedData;
+	}, [data, selectedTopic, sortCriteria]);
 
 	useEffect(() => {
 		const timer = setInterval(() => {
@@ -41,6 +63,32 @@ const YoutubeToday = ({ data }: YoutubeTodayProps) => {
 		return () => clearInterval(timer);
 	}, []);
 
+	useEffect(() => {
+		const handleScroll = () => {
+			if (scrollRef.current) {
+				const scrollRefTop = scrollRef.current.getBoundingClientRect().top;
+				setIsFixed(scrollRefTop <= 0);
+			}
+		};
+
+		window.addEventListener("scroll", handleScroll);
+
+		handleScroll();
+
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, []);
+
+	useEffect(() => {
+		if (tooltipVisible) document.addEventListener("click", handleClickOutside);
+		else document.removeEventListener("click", handleClickOutside);
+
+		return () => {
+			document.removeEventListener("click", handleClickOutside);
+		};
+	}, [tooltipVisible]);
+
 	return (
 		<Container>
 			<TodayTitle>
@@ -48,8 +96,8 @@ const YoutubeToday = ({ data }: YoutubeTodayProps) => {
 				{TODAY_TITLE}
 			</TodayTitle>
 			<TimeWarning>이 시간이 지나면 읽을 수 없습니다.</TimeWarning>
-			<Time>{timeLeft}</Time>
-			<TopicNav>
+			<Time ref={scrollRef}>{timeLeft}</Time>
+			<TopicNav $isFixed={isFixed}>
 				{YOUTUBE_TOPICS.map(({ topic, icon }) => {
 					return (
 						<Topic key={topic} onClick={() => handleTopicClick(topic)}>
@@ -65,20 +113,28 @@ const YoutubeToday = ({ data }: YoutubeTodayProps) => {
 					);
 				})}
 			</TopicNav>
-			<SortOptions>
+			<SortOptions $isFixed={isFixed}>
 				<div>
-					<OptionBtn selected={true}>참여도</OptionBtn>
-					<OptionBtn selected={false}>조회수</OptionBtn>
+					<OptionBtn selected={sortCriteria === "engagement"} onClick={() => handleSortClick("engagement")}>
+						참여도
+					</OptionBtn>
+					<OptionBtn selected={sortCriteria === "views"} onClick={() => handleSortClick("views")}>
+						조회수
+					</OptionBtn>
 				</div>
-				<InfoIcon />
+				<TooltipSection ref={infoIconRef}>
+					<InfoIcon onClick={handleClickIcon} />
+					{tooltipVisible && (
+						<Tooltip $tooltipVisible={tooltipVisible}>
+							<span>{sortCriteria === "engagement" ? TOOLTIP_OPTION1 : TOOLTIP_OPTION2}</span>
+						</Tooltip>
+					)}
+				</TooltipSection>
 			</SortOptions>
-			{data
-				.filter((item) => selectedTopic === "전체" || item.section === selectedTopic)
-				.map((item, index) => {
-					const topicIcon = YOUTUBE_TOPICS.find((topic) => topic.topic === item.section)?.icon;
-
-					return <TopicCard key={index} icon={topicIcon} {...item} />;
-				})}
+			{filteredAndSortedData.map((item, index) => {
+				const topicIcon = YOUTUBE_TOPICS.find((topic) => topic.topic === item.section)?.icon;
+				return <TopicCard key={index} icon={topicIcon} {...item} />;
+			})}
 		</Container>
 	);
 };
@@ -92,6 +148,7 @@ const Container = styled.div`
 	display: flex;
 	flex-direction: column;
 	margin-top: 36px;
+	font-family: "Pretendard Variable";
 `;
 
 const TodayTitle = styled.span`
@@ -120,20 +177,24 @@ const Time = styled.span`
 	line-height: 16px;
 	text-align: left;
 	padding-bottom: 20px;
-	margin-bottom: 12px;
 	border-bottom: 1px solid rgba(0, 0, 0, 1);
 `;
 
-const TopicNav = styled.div`
+const TopicNav = styled.div<{ $isFixed: boolean }>`
 	width: calc(100% + 20px);
 	display: flex;
 	gap: 12px;
+	padding-top: 12px;
 	margin-bottom: 5px;
+	background-color: rgba(242, 242, 242, 1);
+
+	padding-right: ${(props) => (props.$isFixed ? "50px" : "auto")};
+	position: ${(props) => (props.$isFixed ? "fixed" : "static")};
+	top: ${(props) => (props.$isFixed ? "52px" : "auto")};
+	left: ${(props) => (props.$isFixed ? "20px" : "auto")};
+	z-index: ${(props) => (props.$isFixed ? 10000 : 0)};
+
 	overflow-x: scroll;
-
-	justify-content: baseline;
-
-	// 스크롤 UI 제거
 	::-webkit-scrollbar {
 		display: none;
 	}
@@ -154,6 +215,7 @@ const Topic = styled.div`
 
 		display: inline-block;
 		text-align: center;
+		width: 46px;
 	}
 `;
 
@@ -169,15 +231,41 @@ const IconBox = styled.div<{ selected: boolean }>`
 	/* color: ${(props) => (props.selected ? "#ffffff" : "#333333")}; */
 `;
 
-const SortOptions = styled.div`
+const SortOptions = styled.div<{ $isFixed: boolean }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 16px;
+	margin-top: ${(props) => (props.$isFixed ? "130px" : "0px")};
 
 	div {
 		display: flex;
 		gap: 4px;
+	}
+`;
+
+const TooltipSection = styled.div`
+	position: relative;
+	cursor: pointer;
+`;
+
+const Tooltip = styled.div<{ $tooltipVisible: boolean }>`
+	position: absolute;
+	right: 0;
+	top: 20px;
+	background-color: #555555;
+	color: #fff;
+	z-index: 1000;
+	display: ${(props) => (props.$tooltipVisible ? "block" : "none")};
+
+	width: 180px;
+	padding: 12px 13px;
+	border-radius: 12px;
+
+	span {
+		font-size: 12px;
+		font-weight: 500;
+		line-height: 140%;
 	}
 `;
 

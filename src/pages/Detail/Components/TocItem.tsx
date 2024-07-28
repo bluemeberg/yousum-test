@@ -1,62 +1,56 @@
 import styled from "styled-components";
 import PlayIcon from "@/assets/play.svg?react";
+import { formatTimeRange } from "@/utils/formatter";
+import DimmedArea from "./DimmedArea";
+import { forwardRef } from "react";
 
 interface TocItemProps {
+	title: string;
 	start: number;
-	end: number;
 	summary: string;
-	headline: string;
+	dimmed?: boolean;
 	onClick: () => void;
 }
 
-const TocItem = ({ start, end, summary, headline, onClick }: TocItemProps) => {
-	const formatMinutesToTime = (minutes: number): string => {
-		const hours = Math.floor(minutes / 60);
-		const remainingMinutes = minutes % 60;
-		const formattedHours = hours.toString().padStart(2, "0");
-		const formattedMinutes = remainingMinutes.toString().padStart(2, "0");
-		return `${formattedHours}:${formattedMinutes}`;
-	};
-
-	const formatTimeRange = (startMinutes: number, endMinutes: number): string => {
-		const startTime = formatMinutesToTime(startMinutes);
-		const endTime = formatMinutesToTime(endMinutes);
-		return `${startTime} - ${endTime}`;
-	};
-
+const TocItem = forwardRef<HTMLDivElement, TocItemProps>(({ title, start, summary, dimmed, onClick }, ref) => {
 	return (
-		<Container>
-			<Title>{headline}</Title>
-			<Thumbnail>
-				<PlayIcon onClick={onClick} />
-			</Thumbnail>
-			<Timeline>
-				<PlayIcon width={16} height={16} />
-				<span>{formatTimeRange(start, end)}</span>
-			</Timeline>
-			<Summary>{summary}</Summary>
+		<Container ref={ref}>
+			<ContentWrapper dimmed={dimmed}>
+				<Title>{title}</Title>
+				<Thumbnail>
+					<PlayIcon onClick={onClick} />
+				</Thumbnail>
+				<Timeline>
+					<PlayIcon width={16} height={16} />
+					<span>{formatTimeRange(start)}</span>
+				</Timeline>
+				<Summary>{summary}</Summary>
+			</ContentWrapper>
+			{dimmed && <DimmedArea />}
 		</Container>
 	);
-};
+});
 
 export default TocItem;
 
 const Container = styled.div`
+	position: relative;
 	display: flex;
 	flex-direction: column;
-	width: calc(100% - 40px);
-	margin-top: 40px;
-	margin-bottom: 32px;
+	margin-top: 24px;
+`;
+
+const ContentWrapper = styled.div<{ dimmed?: boolean }>`
+	opacity: ${(props) => (props.dimmed ? 0.8 : 1)};
 `;
 
 const Title = styled.span`
 	font-size: 24px;
 	font-weight: 600;
-	line-height: 120%;
+	line-height: 23.87px;
 `;
 
 const Thumbnail = styled.div`
-	width: 317px;
 	height: 155px;
 	padding: 42px 0px 41px 0px;
 	background: rgba(217, 217, 217, 1);
@@ -84,6 +78,5 @@ const Summary = styled.div`
 	font-size: 18px;
 	font-weight: 400;
 	line-height: 168%;
-	/* letter-spacing: ; */
-	text-align: left;
+	letter-spacing: -0.02em;
 `;

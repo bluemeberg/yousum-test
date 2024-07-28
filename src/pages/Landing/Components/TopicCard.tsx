@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useSetRecoilState } from "recoil";
 import { detailDataState } from "@/store/detailData";
 import { DataProps } from "@/types/dataProps";
+import { parseSubscribersCount } from "@/utils/formatter";
 
 interface TopicCardProps extends DataProps {
 	icon: React.ReactNode;
@@ -55,7 +56,7 @@ const TopicCard = (props: TopicCardProps) => {
 				<ProfileImage src={channel_thumbnail}></ProfileImage>
 				<ProfileInfo>
 					<Name>{channel_name}</Name>
-					<Subscriber>{channel_subscribers}명</Subscriber>
+					<Subscriber>{parseSubscribersCount(channel_subscribers)}</Subscriber>
 				</ProfileInfo>
 			</ChannelInfo>
 		</Container>
@@ -95,6 +96,7 @@ const IconWrapper = styled.div`
 		font-weight: 500;
 		line-height: 18px;
 		text-align: center;
+		width: 46px;
 	}
 `;
 
@@ -110,7 +112,7 @@ const IconBox = styled.div`
 
 const Title = styled.span`
 	font-size: 20px;
-	font-weight: 900;
+	font-weight: 800;
 	line-height: 28px;
 `;
 
@@ -120,7 +122,7 @@ const Summary = styled.div`
 	background: rgba(244, 245, 247, 1);
 
 	p {
-		height: 80px;
+		height: 108px;
 		font-size: 16px;
 		font-weight: 400;
 		line-height: 168%;

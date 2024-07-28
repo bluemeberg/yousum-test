@@ -4,7 +4,7 @@ import styled from "styled-components";
 // import { auth } from "@/firebase";
 // import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
-const GoogleLoginBtn = () => {
+const GoogleLoginLink = () => {
 	// const setUser = useSetRecoilState(userState);
 
 	// const provider = new GoogleAuthProvider();
@@ -22,20 +22,19 @@ const GoogleLoginBtn = () => {
 	// 	}
 	// };
 
-	return <GoogleLoginButton>구글 계정 연동해서 무료 구독하기</GoogleLoginButton>;
+	return <GoogleLoginButton>로그인해서 피드 마저 읽기</GoogleLoginButton>;
 };
 
-export default GoogleLoginBtn;
+export default GoogleLoginLink;
 
 const GoogleLoginButton = styled.button`
-	width: calc(100% - 40px);
-	height: 60px;
-	border-radius: 4px;
-	background-color: #007bff;
+	border: none;
+	border-bottom: 1px solid rgba(0, 123, 255, 1);
+	background-color: white;
 
 	font-family: "Pretendard Variable";
-	font-size: 16px;
+	font-size: 13px;
 	font-weight: 700;
-	line-height: 22px;
-	color: white;
+	line-height: 15.51px;
+	color: rgba(0, 123, 255, 1);
 `;

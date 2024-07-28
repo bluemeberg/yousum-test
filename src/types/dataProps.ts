@@ -15,11 +15,13 @@ export interface DataProps {
 	headline_title: string;
 	headline_subtitle: string;
 	short_summary: string;
+	engagement_score: number;
+	views: number;
 }
 
 interface TemplateSummary {
-	headline: string;
-	contents: string;
+	title: string;
+	detail_contents: string;
 	start_time: string;
 	end_time: string;
 }

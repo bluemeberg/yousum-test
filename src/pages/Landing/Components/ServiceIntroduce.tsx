@@ -1,41 +1,18 @@
 import styled from "styled-components";
+import { TOPIC_TAGS } from "@/constants/topic";
 
-const SERVICE_TITLE = "유튜브 영상 정보의 홍수 속에서";
-const SERVICE_SUB_TITLE = "나만 똑똑하게 시청하는 방법.";
+const SERVICE_TITLE = "유튜브 영상 정보의 홍수 속에서 <br/> 나만 똑똑하게 시청하는 방법.";
 const SERVICE_DESCRIPTION =
-	"500시간이 넘는 영상이 매 분마다 업로드 되는 현재, 오늘 업로드된 주요 영상들을 <span class='highlight'>매일</span> 읽어드립니다.";
-const SERVICE_SUBDESCRIPTION = "<span class='highlight'>17</span>가지 주요 분야 영상들 매일 요약받고 트렌디해지기!";
-const SERVICE_TAGS = [
-	"주식",
-	"부동산",
-	"가상자산",
-	"경제",
-	"정치",
-	"과학",
-	"IT/테크",
-	"자동차",
-	"건강",
-	"자기계발",
-	"요리",
-	"연애/결혼",
-	"패션",
-	"뷰티/메이크업",
-	"피트니스",
-	"인공지능",
-	"역사",
-];
+	"500시간이 넘는 영상이 매 분마다 업로드 되는 현재, <br/> <span class='highlight'>오늘 업로드된</span> 주요 <span class='highlight'>영상</span>들을 <span class='highlight'>매일 읽어드립니다.</span>";
+const SERVICE_SUBDESCRIPTION = `<span class='highlight'>${TOPIC_TAGS.length}</span>가지 주요 분야 유투브 아티클 매일 읽고 인사이트 얻기!`;
 
 const ServiceIntroduce = () => {
 	return (
 		<Container>
-			<ServiceTitle>
-				{SERVICE_TITLE}
-				<br />
-				{SERVICE_SUB_TITLE}
-			</ServiceTitle>
+			<ServiceTitle dangerouslySetInnerHTML={{ __html: SERVICE_TITLE }} />
 			<ServiceDesc dangerouslySetInnerHTML={{ __html: SERVICE_DESCRIPTION }} />
 			<TopicTags>
-				{SERVICE_TAGS.map((topic) => {
+				{TOPIC_TAGS.map((topic) => {
 					return <TopicTag key={topic}>{topic}</TopicTag>;
 				})}
 			</TopicTags>
@@ -49,7 +26,7 @@ export default ServiceIntroduce;
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 18px;
+	gap: 16px;
 	padding: 0 20px;
 	margin-bottom: 12px;
 
@@ -72,7 +49,6 @@ const ServiceDesc = styled.span`
 `;
 
 const TopicTags = styled.div`
-	width: 320px;
 	padding: 12px 9px;
 	gap: 10px;
 	border-radius: 4px;
@@ -101,5 +77,5 @@ const ServiceSubDesc = styled.span`
 	font-size: 14px;
 	font-weight: 400;
 	line-height: 16.71px;
-	margin-top: 10px;
+	margin-top: 12px;
 `;
