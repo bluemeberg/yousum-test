@@ -13,6 +13,19 @@ interface TocItemProps {
 }
 
 const TocItem = forwardRef<HTMLDivElement, TocItemProps>(({ title, start, summary, dimmed, onClick }, ref) => {
+	const formatSummary = (summary: string) => {
+		// 소수점을 포함한 숫자를 예외 처리하는 정규 표현식
+		const regex = /(?<!\d\.\d)\. /g;
+		return summary
+			.split(regex)
+			.filter((sentence) => sentence.trim() !== "")
+			.map((sentence, index) => (
+				<span key={index} className="line-break">
+					{sentence.trim()}.
+				</span>
+			));
+	};
+
 	return (
 		<Container ref={ref}>
 			<ContentWrapper dimmed={dimmed}>
@@ -24,7 +37,7 @@ const TocItem = forwardRef<HTMLDivElement, TocItemProps>(({ title, start, summar
 					<PlayIcon width={16} height={16} />
 					<span>{formatTimeRange(start)}</span>
 				</Timeline>
-				<Summary>{summary}</Summary>
+				<Summary>{formatSummary(summary)}</Summary>
 			</ContentWrapper>
 			{dimmed && <DimmedArea />}
 		</Container>
@@ -37,7 +50,7 @@ const Container = styled.div`
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	margin-top: 24px;
+	margin-top: 60px;
 `;
 
 const ContentWrapper = styled.div<{ dimmed?: boolean }>`
@@ -47,7 +60,7 @@ const ContentWrapper = styled.div<{ dimmed?: boolean }>`
 const Title = styled.span`
 	font-size: 24px;
 	font-weight: 600;
-	line-height: 23.87px;
+	line-height: 140%;
 `;
 
 const Thumbnail = styled.div`
@@ -78,5 +91,13 @@ const Summary = styled.div`
 	font-size: 18px;
 	font-weight: 400;
 	line-height: 168%;
-	letter-spacing: -0.02em;
+	margin-left: 8px;
+	span {
+		display: block;
+	}
+	span.line-break {
+		font-weight: 400;
+		line-height: 168%;
+		margin-bottom: 12px; /* 각 문장 간의 간격을 조절 */
+	}
 `;
