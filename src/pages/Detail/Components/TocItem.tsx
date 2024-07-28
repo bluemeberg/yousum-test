@@ -19,9 +19,10 @@ const TocItem = forwardRef<HTMLDivElement, TocItemProps>(({ title, start, summar
 		return summary
 			.split(regex)
 			.filter((sentence) => sentence.trim() !== "")
-			.map((sentence, index) => (
+			.map((sentence, index, array) => (
 				<span key={index} className="line-break">
-					{sentence.trim()}.
+					{sentence.trim()}
+					{index !== array.length - 1 ? "." : ""}
 				</span>
 			));
 	};

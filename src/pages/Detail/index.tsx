@@ -61,12 +61,15 @@ const index = () => {
 	}, []);
 
 	const formatSummary = (summary: string) => {
+		// 소수점을 포함한 숫자를 예외 처리하는 정규 표현식
+		const regex = /(?<!\d\.\d)\. /g;
 		return summary
-			.split(".")
+			.split(regex)
 			.filter((sentence) => sentence.trim() !== "")
-			.map((sentence, index) => (
+			.map((sentence, index, array) => (
 				<span key={index} className="line-break">
-					{sentence.trim()}.
+					{sentence.trim()}
+					{index !== array.length - 1 ? "." : ""}
 				</span>
 			));
 	};
@@ -172,7 +175,7 @@ const Preview = styled.div<{ $isFixed: boolean }>`
 	}
 	span.line-break {
 		font-weight: 400;
-		line-height: 140%;
+		line-height: 160%;
 		margin-bottom: 8px; /* 각 문장 간의 간격을 조절 */
 	}
 	span:last-child {
