@@ -6,8 +6,6 @@ import { useRecoilValue } from "recoil";
 import { detailDataState } from "@/store/detailData";
 import { DataProps } from "@/types/dataProps";
 import Contents from "./Components/Contents";
-import ReactGA from "react-ga4";
-import { useLocation } from "react-router-dom";
 
 const index = () => {
 	const detailData = useRecoilValue<DataProps>(detailDataState);
