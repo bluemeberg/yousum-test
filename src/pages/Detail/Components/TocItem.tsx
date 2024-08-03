@@ -3,6 +3,7 @@ import PlayIcon from "@/assets/play.svg?react";
 import { formatTimeRange } from "@/utils/formatter";
 import DimmedArea from "./DimmedArea";
 import { forwardRef } from "react";
+import captureImage from "/src/assets/captured_frame_cO0KnvxUnvM_1.png";
 
 interface TocItemProps {
 	title: string;
@@ -32,7 +33,8 @@ const TocItem = forwardRef<HTMLDivElement, TocItemProps>(({ title, start, summar
 			<ContentWrapper dimmed={dimmed}>
 				<Title>{title}</Title>
 				<Thumbnail>
-					<PlayIcon onClick={onClick} />
+					<FloatingPlayIcon onClick={onClick} />
+					<ThumbnailImg src={captureImage} />
 				</Thumbnail>
 				<Timeline>
 					<PlayIcon width={16} height={16} />
@@ -65,13 +67,26 @@ const Title = styled.span`
 `;
 
 const Thumbnail = styled.div`
-	height: 155px;
-	padding: 42px 0px 41px 0px;
+	height: 196px;
+	/* padding: 42px 0px 41px 0px; */
 	background: rgba(217, 217, 217, 1);
 	margin-top: 12px;
 	margin-bottom: 8px;
 	display: flex;
-	justify-content: center;
+	position: relative;
+	/* justify-content: center; */
+`;
+
+const FloatingPlayIcon = styled(PlayIcon)`
+	position: absolute;
+	top: 40%;
+	left: 38%;
+	width: 48px;
+	height: 48px;
+`;
+
+const ThumbnailImg = styled.img`
+	height: 196px;
 `;
 
 const Timeline = styled.div`

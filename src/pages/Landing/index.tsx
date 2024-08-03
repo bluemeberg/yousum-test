@@ -9,6 +9,7 @@ import Footer from "./Components/Footer";
 import GoogleLoginBtn from "./Components/GoogleLoginBtn";
 import { dataState } from "@/store/data";
 import { userState } from "@/store/user";
+import { setUserId, setUserProperties, getAnonymousId } from "../../utils/ga4.js"; // GA4 유틸리티 함수 임포트
 
 const index = () => {
 	const setApiData = useSetRecoilState(dataState);
@@ -28,7 +29,14 @@ const index = () => {
 
 		getData();
 	}, [setApiData]);
-
+	useEffect(() => {
+		const anonymousId = getAnonymousId();
+		setUserId(anonymousId);
+		setUserProperties({
+			favorite_color: "blue",
+			membership_level: "gold",
+		});
+	}, []);
 	return (
 		<Container $isLogin={user.name !== ""}>
 			<LogoHeader />
