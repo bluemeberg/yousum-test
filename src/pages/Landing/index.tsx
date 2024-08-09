@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { styled } from "styled-components";
 import axios from "axios";
@@ -28,6 +28,29 @@ const index = () => {
 
 		getData();
 	}, [setApiData]);
+	const [data, setData] = useState<string | null>(null);
+	const [loading, setLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
+
+	const fetchVideoData = async () => {
+		setLoading(true);
+		setError(null);
+
+		try {
+			const response = await fetch("https://claying.shop/video?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
+			if (!response.ok) {
+				throw new Error("Failed to fetch video data");
+			}
+
+			const result = await response.json();
+			setData(JSON.stringify(result, null, 2));
+		} catch (error: any) {
+			setError(error.message);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<Container $isLogin={user.name !== ""}>
@@ -38,6 +61,13 @@ const index = () => {
 					<GoogleLoginBtn />
 				</>
 			)}
+			<div>
+				<button onClick={fetchVideoData} disabled={loading}>
+					{loading ? "Loading..." : "Fetch Video Data"}
+				</button>
+				{error && <p style={{ color: "red" }}>{error}</p>}
+				{data && <pre style={{ textAlign: "left", whiteSpace: "pre-wrap" }}>{data}</pre>}
+			</div>
 			<YoutubeToday data={apiData} />
 			<Footer />
 		</Container>

@@ -3,6 +3,7 @@ import styled from "styled-components";
 // import { userState } from "@/store/user";
 // import { auth } from "@/firebase";
 // import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+// import { trackButtonClick } from "../../../utils/ga4.js "; // GA4 유틸리티 함수 임포트
 
 const GoogleLoginBtn = () => {
 	// const setUser = useSetRecoilState(userState);
@@ -21,8 +22,10 @@ const GoogleLoginBtn = () => {
 	// 		console.error(e);
 	// 	}
 	// };
-
-	return <GoogleLoginButton>구글 계정 연동해서 무료 구독하기</GoogleLoginButton>;
+	const handleButtonClick = () => {
+		// trackButtonClick("User Interaction", "click", "Home Page Button");
+	};
+	return <GoogleLoginButton onClick={handleButtonClick}>구글 계정 연동해서 무료 구독하기</GoogleLoginButton>;
 };
 
 export default GoogleLoginBtn;

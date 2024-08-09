@@ -1,12 +1,8 @@
 import styled from "styled-components";
-// import { useSetRecoilState } from "recoil";
-// import { userState } from "@/store/user";
 // import { auth } from "@/firebase";
 // import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const GoogleLoginLink = () => {
-	// const setUser = useSetRecoilState(userState);
-
 	// const provider = new GoogleAuthProvider();
 
 	// const signInGoogle = async () => {
