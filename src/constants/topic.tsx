@@ -52,7 +52,7 @@ export const YOUTUBE_TOPICS = [
 		icon: <ScienceIcon />,
 	},
 	{
-		topic: "IT/테크",
+		topic: "테크",
 		icon: <ItTechIcon />,
 	},
 	{

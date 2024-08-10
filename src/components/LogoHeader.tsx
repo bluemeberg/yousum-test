@@ -3,7 +3,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "@/store/user";
 import BackIcon from "@/assets/back.svg?react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { auth, signOut } from "@/firebase";
+// import { auth, signOut } from "@/firebase";
 
 interface LogoHeaderProps {
 	title?: string;
@@ -26,7 +26,7 @@ const LogoHeader = ({ title = "" }: LogoHeaderProps) => {
 
 	const logOut = async () => {
 		try {
-			await signOut(auth);
+			// await signOut(auth);
 			setUser({
 				name: "",
 				email: "",
