@@ -27,7 +27,6 @@ const index = () => {
 		};
 		getData();
 	}, [setApiData]);
-	const [data, setData] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -63,7 +62,6 @@ const index = () => {
 			const imageSrc3 = `data:image/png;base64,${base64Image3}`;
 			const base64Image4 = result[4].content; // replace 'image' with the correct key
 			const imageSrc4 = `data:image/png;base64,${base64Image4}`;
-			setData(JSON.stringify(result, null, 2));
 			setImageSrc(imageSrc); // Set the image source
 			setImageSrc1(imageSrc1); // Set the image source			setImageSrc(imageSrc); // Set the image source
 			setImageSrc2(imageSrc2); // Set the image source
