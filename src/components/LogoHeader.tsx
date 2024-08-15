@@ -1,9 +1,8 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { userState } from "@/store/user";
-import BackIcon from "@/assets/back.svg?react";
 import { useNavigate, useLocation } from "react-router-dom";
-// import { auth, signOut } from "@/firebase";
+import { auth, signOut } from "@/firebase";
 
 interface LogoHeaderProps {
 	title?: string;
@@ -12,9 +11,34 @@ interface LogoHeaderProps {
 const LogoHeader = ({ title = "" }: LogoHeaderProps) => {
 	const user = useRecoilValue(userState);
 	const setUser = useSetRecoilState(userState);
+	const player = useRecoilValue(playerState);
+	const setPlayer = useSetRecoilState(playerState);
+	const [toastVisible, setToastVisible] = useState(false);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const isDetailPage = location.pathname.includes("/detail");
+
+	const copyUrlToClipboard = () => {
+		const currentUrl = window.location.href;
+
+		if (navigator.clipboard) {
+			navigator.clipboard
+				.writeText(currentUrl)
+				.then(() => {
+					setToastVisible(true);
+					setTimeout(() => setToastVisible(false), 2000);
+				})
+				.catch((err) => {
+					console.error("URL 복사에 실패했습니다.", err);
+				});
+		} else {
+			console.warn("이 브라우저는 Clipboard API를 지원하지 않습니다.");
+		}
+	};
+
+	const togglePlayerVisible = () => {
+		setPlayer(!player);
+	};
 
 	const goBack = () => {
 		navigate(-1);
@@ -38,23 +62,36 @@ const LogoHeader = ({ title = "" }: LogoHeaderProps) => {
 	};
 
 	return (
-		<Container $isDetailPage={isDetailPage}>
-			<div>
-				{isDetailPage && <BackIcon onClick={goBack} />}
-				{title === "" ? (
-					<span onClick={goHome} className="logo">
-						로고
-					</span>
-				) : (
-					<Title>{title}</Title>
+		<>
+			<Container $isDetailPage={isDetailPage}>
+				<div>
+					{isDetailPage && <BackIcon onClick={goBack} />}
+					{title === "" ? (
+						<span onClick={goHome} className="logo">
+							로고
+						</span>
+					) : (
+						<Title>{title}</Title>
+					)}
+				</div>
+				{isDetailPage && title !== "" && (
+					<IconSection>
+						{player ? (
+							<YoutubeOffIcon onClick={togglePlayerVisible} />
+						) : (
+							<YoutubeOnIcon onClick={togglePlayerVisible} />
+						)}
+						<ShareIcon onClick={copyUrlToClipboard} />
+					</IconSection>
 				)}
-			</div>
-			{user.picture !== "" && (
-				<ProfileImage onClick={logOut}>
-					{user.picture !== "" && <img src={user.picture} alt="User profile" />}
-				</ProfileImage>
-			)}
-		</Container>
+				{title === "" && user.picture !== "" && (
+					<ProfileImage onClick={logOut}>
+						{user.picture !== "" && <img src={user.picture} alt="User profile" />}
+					</ProfileImage>
+				)}
+			</Container>
+			<Toast message="링크가 복사되었습니다" visible={toastVisible} />
+		</>
 	);
 };
 export default LogoHeader;
@@ -69,17 +106,18 @@ const Container = styled.header<{ $isDetailPage: boolean }>`
 	font-family: "Pretendard Variable";
 
 	display: flex;
-	justify-content: space-between;
+	justify-content: ${(props) => (props.$isDetailPage ? "space-between" : "space-between")};
 	align-items: center;
-	gap: 20px;
 	z-index: 1000;
 
 	div {
 		display: flex;
-		gap: 20px;
+		align-items: center;
+		gap: 8px;
 	}
 
 	.logo {
+		margin-left: 8px;
 		color: ${(props) => (props.$isDetailPage ? "rgba(0, 0, 0, 1)" : "rgba(255, 255, 255, 1)")};
 	}
 `;
@@ -88,7 +126,7 @@ const Title = styled.span`
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 19.09px;
-
+	width: 90%;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -105,4 +143,10 @@ const ProfileImage = styled.div`
 		border-radius: 50%;
 		overflow: hidden;
 	}
+`;
+
+const IconSection = styled.div`
+	display: flex;
+	gap: 12px !important;
+	align-items: center;
 `;

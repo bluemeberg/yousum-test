@@ -23,11 +23,12 @@ const TopicCard = (props: TopicCardProps) => {
 		channel_name,
 		channel_subscribers,
 		icon,
+		id,
 	} = props;
 
 	const handleNavigate = () => {
 		setTopicState(props);
-		navigate("/detail");
+		navigate(`/detail/${id}`);
 	};
 
 	return (
@@ -122,7 +123,7 @@ const Summary = styled.div`
 	background: rgba(244, 245, 247, 1);
 
 	p {
-		height: 108px;
+		height: 54px;
 		font-size: 16px;
 		font-weight: 400;
 		line-height: 168%;
@@ -130,7 +131,7 @@ const Summary = styled.div`
 		display: -webkit-box;
 		word-break: break-word;
 		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 4;
+		-webkit-line-clamp: 2;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: normal;
