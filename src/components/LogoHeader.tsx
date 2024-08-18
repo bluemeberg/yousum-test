@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useNavigate, useLocation } from "react-router-dom";
-import { auth, signOut } from "@/firebase";
+// import { auth, signOut } from "@/firebase";
 import { userState } from "@/store/user";
 import { playerState } from "@/store/player";
 import BackIcon from "@/assets/back.svg?react";

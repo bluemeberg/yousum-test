@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 import { useSetRecoilState } from "recoil";
 import { userState } from "@/store/user";
-import { auth } from "@/firebase";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+// import { auth } from "@/firebase";
+// import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 interface GoogleLoginProps {
 	variant: "button" | "link";
@@ -12,16 +12,16 @@ interface GoogleLoginProps {
 const GoogleLogin: React.FC<GoogleLoginProps> = ({ variant, text }) => {
 	const setUser = useSetRecoilState(userState);
 
-	const provider = new GoogleAuthProvider();
+	// const provider = new GoogleAuthProvider();
 
 	const signInGoogle = async () => {
 		try {
-			const { user } = await signInWithPopup(auth, provider);
-			setUser({
-				name: user.displayName,
-				email: user.email,
-				picture: user.photoURL,
-			});
+			// const { user } = await signInWithPopup(auth, provider);
+			// setUser({
+			// 	name: user.displayName,
+			// 	email: user.email,
+			// 	picture: user.photoURL,
+			// });
 		} catch (e) {
 			console.error(e);
 		}
