@@ -17,7 +17,7 @@ interface LogoHeaderProps {
 
 const LogoHeader = ({ title = "" }: LogoHeaderProps) => {
 	const user = useRecoilValue(userState);
-	const setUser = useSetRecoilState(userState);
+	// const setUser = useSetRecoilState(userState);
 	const player = useRecoilValue(playerState);
 	const setPlayer = useSetRecoilState(playerState);
 	const [toastVisible, setToastVisible] = useState(false);
@@ -57,12 +57,12 @@ const LogoHeader = ({ title = "" }: LogoHeaderProps) => {
 
 	const logOut = async () => {
 		try {
-			await signOut(auth);
-			setUser({
-				name: "",
-				email: "",
-				picture: "",
-			});
+			// await signOut(auth);
+			// setUser({
+			// 	name: "",
+			// 	email: "",
+			// 	picture: "",
+			// });
 		} catch (e) {
 			console.error("Error loggin out: ", e);
 		}

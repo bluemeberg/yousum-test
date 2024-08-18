@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
-import { useSetRecoilState } from "recoil";
-import { userState } from "@/store/user";
+// import { useSetRecoilState } from "recoil";
+// import { userState } from "@/store/user";
 // import { auth } from "@/firebase";
 // import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
@@ -10,7 +10,7 @@ interface GoogleLoginProps {
 }
 
 const GoogleLogin: React.FC<GoogleLoginProps> = ({ variant, text }) => {
-	const setUser = useSetRecoilState(userState);
+	// const setUser = useSetRecoilState(userState);
 
 	// const provider = new GoogleAuthProvider();
 
