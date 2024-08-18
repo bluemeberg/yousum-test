@@ -24,7 +24,7 @@ const LogoHeader = ({ title = "" }: LogoHeaderProps) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const isDetailPage = location.pathname.includes("/detail");
-
+	console.log("hello");
 	const copyUrlToClipboard = () => {
 		const currentUrl = window.location.href;
 
